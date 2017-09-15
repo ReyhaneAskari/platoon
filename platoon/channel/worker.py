@@ -111,6 +111,7 @@ class Worker(object):
         self._lock = posix_ipc.Semaphore("{}_lock".format(self._job_uid))
 
         signal.signal(signal.SIGINT, self._handle_force_close)
+        self._register_to_platoon()
         try:
             self._register_to_platoon()
         except Exception as exc:
@@ -285,7 +286,7 @@ class Worker(object):
             response = self.send_req("platoon-get_platoon_info",
                                      info={'device': self.device,
                                            'local_id': lid})
-            nlid = base64.b64decode(response['local_id'].encode('ascii'))
+            nlid = base64.b64decode(str(lid).encode('ascii'))
             self._local_id.comm_id = bytearray(nlid)
             self._local_size = response['local_size']
             self._local_rank = response['local_rank']
