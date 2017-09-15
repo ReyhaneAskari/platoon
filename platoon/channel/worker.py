@@ -285,7 +285,7 @@ class Worker(object):
             response = self.send_req("platoon-get_platoon_info",
                                      info={'device': self.device,
                                            'local_id': lid})
-            nlid = base64.b64decode(response['local_id'].encode('ascii'))
+            nlid = base64.b64decode(str(lid).encode('ascii'))
             self._local_id.comm_id = bytearray(nlid)
             self._local_size = response['local_size']
             self._local_rank = response['local_rank']
